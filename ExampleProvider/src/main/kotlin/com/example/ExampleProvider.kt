@@ -8,10 +8,10 @@ import com.lagradost.cloudstream3.SearchResponse
 import com.lagradost.cloudstream3.app
 import org.jsoup.nodes.Element
 
-class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers must be an intstance of MainAPI
-    override var mainUrl = "https://phimmoichillv.net"
+class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
+    override var mainUrl = "https://vietsub.org"
     override var name = "Vietsuborg"
-    override val supportedTypes = setOf(TvType.Movie)
+    override val supportedTypes = setOf(TvType.Movie, TvType.Anime, TvType.TvSeries)
 
     override var lang = "vi"
 
@@ -19,7 +19,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers mus
 
     override suspend fun search(query: String): List<SearchResponse> {
         return app.post(
-            "$mainUrl/tim-kiem/$query"
+            "$mainUrl/search/$query"
         ).document
             .select("li.item")
             .mapNotNull {
@@ -28,17 +28,17 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers mus
     }
 
     private fun Element.toSearchResponse(): MovieSearchResponse? {
-        val link = this.select("a").last() ?: return null
+        val link = this.select("div.halim-item a").last() ?: return null
         val href = link.attr("href")
         val title = link.attr("title")
-        val img = this.selectFirst("img")
+        val img = this.selectFirst("figure img")
 
         return MovieSearchResponse(
-            img?.attr("alt")?.replaceFirst("Watch  ", "") ?: return null,
+            title,
             href,
             this@ExampleProvider.name,
             TvType.Movie,
-            fixUrl(img.attr("src"))
+            fixUrl(img?.attr("src") ?: return null)
         )
     }
 
@@ -49,5 +49,4 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers mus
 
         return mainUrl + url
     }
-
 }

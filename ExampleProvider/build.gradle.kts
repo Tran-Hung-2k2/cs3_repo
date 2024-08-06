@@ -10,7 +10,7 @@ version = -1
 cloudstream {
     // All of these properties are optional, you can safely remove them
 
-    description = "Phim vietsuborg"
+    description = "Phim Vietsuborg"
     authors = listOf("Tran Hung")
 
     /**
@@ -22,7 +22,7 @@ cloudstream {
     * */
     status = 1
 
-    tvTypes = listOf("Movie")
+    tvTypes = listOf("Movie", "Anime", "TvSeries")
 
     requiresResources = true
     language = "vi"
