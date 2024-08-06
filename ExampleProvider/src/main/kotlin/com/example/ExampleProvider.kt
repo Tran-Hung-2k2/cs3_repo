@@ -96,7 +96,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
         val document = request.document
 
         val title = document.selectFirst("strong")?.text()?.trim().toString()
-        val link = document.select("div.title-wrapper a").attr("href")
+        val link = document.selectFirst("video")?.attr("src")
         val poster = document.selectFirst("div.jw-preview.jw-reset")?.attr("style")?.let { Regex("""url\(["']?([^"']*)["']?\)""").find(it)?.groups?.get(1)?.value }
         val tags = document.select("p.genres a").map { it.text() }
         val year = document.select(".year").text().trim().toIntOrNull()
@@ -123,7 +123,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             }
 
             newTvSeriesLoadResponse(title, url, TvType.TvSeries, episodes) {
-                this.posterUrl = poster
+                this.posterUrl = fixUrl(poster)
                 this.year = year
                 this.plot = description
                 this.tags = tags
@@ -133,7 +133,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             }
         } else {
             newMovieLoadResponse(title, url, TvType.Movie, link) {
-                this.posterUrl = poster
+                this.posterUrl = fixUrl(poster)
                 this.year = year
                 this.plot = description
                 this.tags = tags
