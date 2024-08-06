@@ -29,20 +29,26 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers mus
 
     private fun Element.toSearchResponse(): MovieSearchResponse? {
         val link = this.select("a").last() ?: return null
-        val href = fixUrl(link.attr("href"))
-        val title = fixUrl(link.attr("title"))
+        val href = link.attr("href")
+        val title = link.attr("title")
         val img = this.selectFirst("img")
 
-        return MovieSearchResponse(
-            img?.attr("alt")?.replaceFirst("Xem ", "") ?: return null,
-            href,
-            title,
-            TvType.Movie,
-            fixUrl(img.attr("src"))
-        )
+        if (img != null) {
+            return MovieSearchResponse(
+                title,
+                href,
+                this@ExampleProvider.name,
+                TvType.Movie,
+                fixUrl(img.attr("src"))
+            )
+        }
     }
 
     private fun fixUrl(url: String): String {
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+            return url
+        }
+
         return "https://phimmoichillv.net$url"
     }
 
