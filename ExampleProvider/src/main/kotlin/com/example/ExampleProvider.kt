@@ -31,7 +31,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
         val link = this.select("div.halim-item a").last() ?: return null
         val href = link.attr("href")
         val title = link.attr("title")
-        val poster = fixUrl(this.selectFirst("img")?.attr("src"))
+        val poster = fixUrl(this.selectFirst("img")?.attr("data-src"))
 
         return MovieSearchResponse(
             title,
@@ -43,7 +43,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
     }
 
     private fun fixUrl(url: String?): String {
-        if (url == "" || url == null) {
+        if (url == null) {
             return "https://i.ebayimg.com/images/g/CwEAAOSwv4xf5cdv/s-l1200.jpg"
         }
 
