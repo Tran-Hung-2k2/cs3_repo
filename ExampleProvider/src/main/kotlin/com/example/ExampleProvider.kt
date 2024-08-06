@@ -43,11 +43,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers mus
     }
 
     private fun fixUrl(url: String): String {
-        if (url.startsWith("http://") || url.startsWith("https://")) {
-            return url
-        }
-
-        return mainUrl + url.removePrefix("/")
+        return "https://vietsub.org$url"
     }
 
 }
