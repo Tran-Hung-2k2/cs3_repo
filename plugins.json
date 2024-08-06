@@ -1,0 +1,23 @@
+[
+    {
+        "iconUrl": "https://vietsub.org/wp-content/uploads/2024/03/favicon_vietsub.png",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/Tran-Hung-2k2/cs3_repo",
+        "fileSize": 18779,
+        "status": 1,
+        "language": "vi",
+        "authors": [
+            "Tran Hung"
+        ],
+        "tvTypes": [
+            "Movie",
+            "Anime",
+            "TvSeries"
+        ],
+        "version": 1,
+        "internalName": "ExampleProvider",
+        "description": "Xem phim t\u1ea1i vietsub.org",
+        "url": "https://raw.githubusercontent.com/Tran-Hung-2k2/cs3_repo/builds/ExampleProvider.cs3",
+        "name": "ExampleProvider"
+    }
+]
