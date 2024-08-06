@@ -21,7 +21,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
         return app.post(
             "$mainUrl/search/$query"
         ).document
-            .select("li.item")
+            .select("article")
             .mapNotNull {
                 it.toSearchResponse()
             }
