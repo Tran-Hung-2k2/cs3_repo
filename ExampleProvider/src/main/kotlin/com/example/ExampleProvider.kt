@@ -33,15 +33,13 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers mus
         val title = link.attr("title")
         val img = this.selectFirst("img")
 
-        if (img != null) {
-            return MovieSearchResponse(
-                title,
-                href,
-                this@ExampleProvider.name,
-                TvType.Movie,
-                fixUrl(img.attr("src"))
-            )
-        }
+        return MovieSearchResponse(
+            img?.attr("alt")?.replaceFirst("Xem ", "") ?: return null,
+            href,
+            this@ExampleProvider.name,
+            TvType.Movie,
+            fixUrl(img.attr("src"))
+        )
     }
 
     private fun fixUrl(url: String): String {
