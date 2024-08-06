@@ -33,10 +33,11 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
         val title = link.attr("title")
 //        val poster = fixUrl(this.selectFirst("img")?.attr("data-src"))
         val img = this.selectFirst("img")
+        val posterUrl = img?.attr("data-src").toString()
 
         return MovieSearchResponse(
             img?.attr("alt")?.replaceFirst("Watch ", "") ?: return null,
-            img.attr("data-src").toString(),
+            href,
             this@ExampleProvider.name,
             TvType.Movie,
             fixUrl(img.attr("data-src")),
