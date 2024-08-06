@@ -36,7 +36,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
 
         return MovieSearchResponse(
             img?.attr("alt")?.replaceFirst("Watch ", "") ?: return null,
-            img.toString(),
+            img.attr("data-src").toString(),
             this@ExampleProvider.name,
             TvType.Movie,
             fixUrl(img.attr("data-src")),
@@ -44,7 +44,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
     }
 
     private fun fixUrl(url: String?): String {
-        if (url == null) {
+        if (url == null || url == "") {
             return "https://i.ebayimg.com/images/g/CwEAAOSwv4xf5cdv/s-l1200.jpg"
         }
 
