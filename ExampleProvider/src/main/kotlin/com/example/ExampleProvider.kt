@@ -3,20 +3,43 @@ package com.example
 import androidx.appcompat.app.AppCompatActivity
 import com.lagradost.cloudstream3.TvType
 import com.lagradost.cloudstream3.MainAPI
+import com.lagradost.cloudstream3.MovieSearchResponse
 import com.lagradost.cloudstream3.SearchResponse
+import com.lagradost.cloudstream3.app
+import com.lagradost.cloudstream3.fixUrl
+import org.jsoup.nodes.Element
 
 class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers must be an intstance of MainAPI
-    override var mainUrl = "https://example.com/" 
-    override var name = "Example provider"
+    override var mainUrl = "https://vietsub.org/"
+    override var name = "Hung provider"
     override val supportedTypes = setOf(TvType.Movie)
 
-    override var lang = "en"
+    override var lang = "vi"
 
-    // enable this when your provider has a main page
     override val hasMainPage = true
 
-    // this function gets called when you search for something
     override suspend fun search(query: String): List<SearchResponse> {
-        return listOf<SearchResponse>()
+        return app.post(
+            "$mainUrl/search/$query"
+        ).document
+            .select("article")
+            .mapNotNull {
+                it.toSearchResponse()
+            }
+    }
+
+    private fun Element.toSearchResponse(): MovieSearchResponse? {
+        val link = this.select("div.halim-item a").last() ?: return null
+        val href = fixUrl(link.attr("href"))
+        val title = fixUrl(link.attr("title"))
+        val img = this.selectFirst("figure img")
+
+        return MovieSearchResponse(
+            img?.attr("alt")?.replaceFirst("Watch ", "") ?: return null,
+            href,
+            title,
+            TvType.Movie,
+            fixUrl(img.attr("src"))
+        )
     }
 }
