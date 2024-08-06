@@ -93,7 +93,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
         val request = app.get(url)
         directUrl = getBaseUrl(request.url)
         val document = request.document
-        val vidUrl = document.selectFirst("video")?.attr("src").toString()
+        val vidUrl = document.selectFirst("video")?.toString()
 
         val title = document.selectFirst("strong")?.text()?.trim().toString()
         val poster = document.selectFirst("div.jw-preview.jw-reset")?.attr("style")?.let {
@@ -153,7 +153,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
     ): Boolean {
         val document = app.get(data).document
 
-        val vidUrl = document.selectFirst("video")?.toString()
+        val vidUrl = document.selectFirst("video")?.attr("src").toString()
 
         val key = document.select("div#content script")
             .find { it.data().contains("filmInfo.episodeID =") }?.data()?.let { script ->
