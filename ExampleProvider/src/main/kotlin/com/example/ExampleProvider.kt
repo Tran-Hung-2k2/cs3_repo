@@ -9,7 +9,7 @@ import com.lagradost.cloudstream3.app
 import org.jsoup.nodes.Element
 
 class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers must be an intstance of MainAPI
-    override var mainUrl = "https://vietsub.org/"
+    override var mainUrl = "https://phimmoichillv.net/"
     override var name = "Vietsuborg"
     override val supportedTypes = setOf(TvType.Movie)
 
@@ -19,19 +19,19 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers mus
 
     override suspend fun search(query: String): List<SearchResponse> {
         return app.post(
-            "$mainUrl/search/$query"
+            "$mainUrl/tim-kiem/$query"
         ).document
-            .select("article")
+            .select("li.item")
             .mapNotNull {
                 it.toSearchResponse()
             }
     }
 
     private fun Element.toSearchResponse(): MovieSearchResponse? {
-        val link = this.select("div.halim-item a").last() ?: return null
+        val link = this.select("a").last() ?: return null
         val href = fixUrl(link.attr("href"))
         val title = fixUrl(link.attr("title"))
-        val img = this.selectFirst("figure img")
+        val img = this.selectFirst("img")
 
         return MovieSearchResponse(
             img?.attr("alt")?.replaceFirst("Xem ", "") ?: return null,
@@ -43,7 +43,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers mus
     }
 
     private fun fixUrl(url: String): String {
-        return "https://vietsub.org$url"
+        return "https://phimmoichillv.net$url"
     }
 
 }
