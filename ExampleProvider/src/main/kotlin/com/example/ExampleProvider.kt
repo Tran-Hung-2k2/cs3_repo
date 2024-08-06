@@ -9,7 +9,7 @@ import com.lagradost.cloudstream3.app
 import org.jsoup.nodes.Element
 
 class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers must be an intstance of MainAPI
-    override var mainUrl = "https://phimmoichillv.net/"
+    override var mainUrl = "https://phimmoichillv.net"
     override var name = "Vietsuborg"
     override val supportedTypes = setOf(TvType.Movie)
 
@@ -34,7 +34,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers mus
         val img = this.selectFirst("img")
 
         return MovieSearchResponse(
-            img?.attr("alt")?.replaceFirst("Xem ", "") ?: return null,
+            img?.attr("alt")?.replaceFirst("Watch  ", "") ?: return null,
             href,
             this@ExampleProvider.name,
             TvType.Movie,
@@ -47,7 +47,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers mus
             return url
         }
 
-        return "https://phimmoichillv.net$url"
+        return mainUrl + url
     }
 
 }
