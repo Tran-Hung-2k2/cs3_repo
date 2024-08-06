@@ -38,11 +38,15 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             href,
             this@ExampleProvider.name,
             TvType.Movie,
-            fixUrl(img?.attr("src") ?: return null)
+            fixUrl(img?.attr("src"))
         )
     }
 
-    private fun fixUrl(url: String): String {
+    private fun fixUrl(url: String?): String {
+        if (url == null) {
+            return "https://i.ebayimg.com/images/g/CwEAAOSwv4xf5cdv/s-l1200.jpg"
+        }
+
         if (url.startsWith("http://") || url.startsWith("https://")) {
             return url
         }
