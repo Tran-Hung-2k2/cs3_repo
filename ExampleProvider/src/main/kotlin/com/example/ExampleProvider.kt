@@ -97,21 +97,9 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
 
         val title = document.selectFirst("strong")?.text()?.trim().toString()
         val link = document.selectFirst("video")?.attr("src")
-//        val poster = document.selectFirst("div.jw-preview.jw-reset")?.attr("style")?.let {
-//            Regex("""url\(["']?([^"']*)["']?\)""").find(it)?.groups?.get(1)?.value
-//        }
-
-        val element = document.selectFirst("div.jw-preview.jw-reset")
-
-        val styleAttr = element?.attr("style")
-
-        val regex = Regex("""url\(["']?([^"']*)["']?\)""")
-        val matchResult = styleAttr?.let { regex.find(it) }
-
-        val urlGroup = matchResult?.groups?.get(1)
-
-        val poster = urlGroup?.value
-
+        val poster = document.selectFirst("div.jw-preview.jw-reset")?.attr("style")?.let {
+            Regex("""url\(["']?([^"']*)["']?\)""").find(it)?.groups?.get(1)?.value
+        }
         val tags = document.select("p.genres a").map { it.text() }
         val year = document.select(".year").text().trim().toIntOrNull()
         val tvType = if (document.select("#listsv-1 li").size > 1) TvType.TvSeries else TvType.Movie
@@ -139,12 +127,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             newTvSeriesLoadResponse(title, url, TvType.TvSeries, episodes) {
                 this.posterUrl = fixUrl(poster)
                 this.year = year
-                this.plot = "Element: ${element?.outerHtml()}\n" +
-                        "Style Attribute: $styleAttr\n" +
-                        "Match Result: ${matchResult?.value}\n" +
-                        "URL Group: ${urlGroup?.value}\n" +
-                        "Poster URL: $poster\n" +
-                        "Description: $description"
+                this.plot = description
                 this.tags = tags
                 this.rating = rating
                 addActors(actors)
@@ -154,12 +137,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             newMovieLoadResponse(title, url, TvType.Movie, link) {
                 this.posterUrl = fixUrl(poster)
                 this.year = year
-                this.plot = "Element: ${element?.outerHtml()}\n" +
-                        "Style Attribute: $styleAttr\n" +
-                        "Match Result: ${matchResult?.value}\n" +
-                        "URL Group: ${urlGroup?.value}\n" +
-                        "Poster URL: $poster\n" +
-                        "Description: $description"
+                this.plot = description
                 this.tags = tags
                 this.rating = rating
                 addActors(actors)
@@ -168,48 +146,32 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
         }
     }
 
-//    override suspend fun loadLinks(
-//        data: String,
-//        isCasting: Boolean,
-//        subtitleCallback: (SubtitleFile) -> Unit,
-//        callback: (ExtractorLink) -> Unit
-//    ): Boolean {
-//        val document = app.get(data).document
-//
-//        val key = document.select("div#content script")
-//            .find { it.data().contains("filmInfo.episodeID =") }?.data()?.let { script ->
-//                val id = script.substringAfter("parseInt('").substringBefore("'")
-//                app.post(
-//                    url = "$directUrl/chillsplayer.php",
-//                    data = mapOf("qcao" to id),
-//                    referer = data,
-//                    headers = mapOf(
-//                        "X-Requested-With" to "XMLHttpRequest",
-//                        "Content-Type" to "application/x-www-form-urlencoded; charset=UTF-8"
-//                    )
-//                ).text.substringAfterLast("iniPlayers(\"")
-//                    .substringBefore("\"")
-//            }
-//
-//        listOf(
-//            Pair("https://sotrim.topphimmoi.org/raw/$key/index.m3u8", "PMFAST"),
-//            Pair("https://dash.megacdn.xyz/raw/$key/index.m3u8", "PMHLS"),
-//            Pair("https://so-trym.phimchill.net/dash/$key/index.m3u8", "PMPRO"),
-//            Pair("https://dash.megacdn.xyz/dast/$key/index.m3u8", "PMBK")
-//        ).map { (link, source) ->
-//            callback.invoke(
-//                ExtractorLink(
-//                    source,
-//                    source,
-//                    link,
-//                    referer = "$directUrl/",
-//                    quality = Qualities.P1080.value,
-//                    INFER_TYPE,
-//                )
-//            )
-//        }
-//        return true
-//    }
+    override suspend fun loadLinks(
+        data: String,
+        isCasting: Boolean,
+        subtitleCallback: (SubtitleFile) -> Unit,
+        callback: (ExtractorLink) -> Unit
+    ): Boolean {
+        val document = app.get(data).document
+
+        val vidUrl = document.selectFirst("video")?.attr("src").toString()
+
+        listOf(
+            Pair(vidUrl, "DEFAULT"),
+        ).map { (link, source) ->
+            callback.invoke(
+                ExtractorLink(
+                    source,
+                    source,
+                    link,
+                    referer = "$directUrl/",
+                    quality = Qualities.P1080.value,
+                    INFER_TYPE,
+                )
+            )
+        }
+        return true
+    }
 
     //    OTHER
     private fun fixUrl(url: String?): String {
