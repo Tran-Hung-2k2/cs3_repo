@@ -39,7 +39,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             img.toString(),
             this@ExampleProvider.name,
             TvType.Movie,
-            fixUrl(img.attr("src")),
+            fixUrl(img.attr("data-src")),
         )
     }
 
