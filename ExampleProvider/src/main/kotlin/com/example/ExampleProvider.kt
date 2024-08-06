@@ -93,6 +93,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
         val request = app.get(url)
         directUrl = getBaseUrl(request.url)
         val document = request.document
+        val vidUrl = document.selectFirst("video")?.attr("src").toString()
 
         val title = document.selectFirst("strong")?.text()?.trim().toString()
         val poster = document.selectFirst("div.jw-preview.jw-reset")?.attr("style")?.let {
@@ -125,7 +126,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             newTvSeriesLoadResponse(title, url, TvType.TvSeries, episodes) {
                 this.posterUrl = fixUrl(poster)
                 this.year = year
-                this.plot = description
+                this.plot = description + vidUrl
                 this.tags = tags
                 this.rating = rating
                 addActors(actors)
@@ -135,7 +136,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             newMovieLoadResponse(title, url, TvType.Movie, url) {
                 this.posterUrl = fixUrl(poster)
                 this.year = year
-                this.plot = description
+                this.plot = description + vidUrl
                 this.tags = tags
                 this.rating = rating
                 addActors(actors)
@@ -154,8 +155,27 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
 
         val vidUrl = document.selectFirst("video")?.attr("src").toString()
 
+        val key = document.select("div#content script")
+            .find { it.data().contains("filmInfo.episodeID =") }?.data()?.let { script ->
+                val id = script.substringAfter("parseInt('").substringBefore("'")
+                app.post(
+                    url = "$directUrl/chillsplayer.php",
+                    data = mapOf("qcao" to id),
+                    referer = data,
+                    headers = mapOf(
+                        "X-Requested-With" to "XMLHttpRequest",
+                        "Content-Type" to "application/x-www-form-urlencoded; charset=UTF-8"
+                    )
+                ).text.substringAfterLast("iniPlayers(\"")
+                    .substringBefore("\"")
+            }
+
         listOf(
             Pair(vidUrl, "DEFAULT"),
+            Pair("https://sotrim.topphimmoi.org/raw/$key/index.m3u8", "PMFAST"),
+            Pair("https://dash.megacdn.xyz/raw/$key/index.m3u8", "PMHLS"),
+            Pair("https://so-trym.phimchill.net/dash/$key/index.m3u8", "PMPRO"),
+            Pair("https://dash.megacdn.xyz/dast/$key/index.m3u8", "PMBK")
         ).map { (link, source) ->
             callback.invoke(
                 ExtractorLink(
