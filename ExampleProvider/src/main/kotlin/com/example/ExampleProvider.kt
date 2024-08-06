@@ -153,7 +153,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
     ): Boolean {
         val document = app.get(data).document
 
-        val vidUrl = document.selectFirst("video")?.attr("src").toString()
+        val vidUrl = document.selectFirst("video")?.toString()
 
         val key = document.select("div#content script")
             .find { it.data().contains("filmInfo.episodeID =") }?.data()?.let { script ->
