@@ -10,8 +10,8 @@ version = -1
 cloudstream {
     // All of these properties are optional, you can safely remove them
 
-    description = "Lorem ipsum"
-    authors = listOf("Cloudburst")
+    description = "Phim vietsuborg"
+    authors = listOf("Tran Hung")
 
     /**
     * Status int as the following:
@@ -25,10 +25,10 @@ cloudstream {
     tvTypes = listOf("Movie")
 
     requiresResources = true
-    language = "en"
+    language = "vi"
 
     // random cc logo i found
-    iconUrl = "https://upload.wikimedia.org/wikipedia/commons/2/2f/Korduene_Logo.png"
+    iconUrl = "https://vietsub.org/wp-content/uploads/2024/03/favicon_vietsub.png"
 }
 
 android {
