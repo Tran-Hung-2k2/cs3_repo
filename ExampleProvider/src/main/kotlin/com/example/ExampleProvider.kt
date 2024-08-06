@@ -6,12 +6,11 @@ import com.lagradost.cloudstream3.MainAPI
 import com.lagradost.cloudstream3.MovieSearchResponse
 import com.lagradost.cloudstream3.SearchResponse
 import com.lagradost.cloudstream3.app
-import com.lagradost.cloudstream3.fixUrl
 import org.jsoup.nodes.Element
 
 class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers must be an intstance of MainAPI
     override var mainUrl = "https://vietsub.org/"
-    override var name = "Hung provider"
+    override var name = "Vietsuborg"
     override val supportedTypes = setOf(TvType.Movie)
 
     override var lang = "vi"
@@ -42,4 +41,13 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers mus
             fixUrl(img.attr("src"))
         )
     }
+
+    private fun fixUrl(url: String): String {
+        if (url.startsWith("http://") || url.startsWith("https://")) {
+            return url
+        }
+
+        return mainUrl + url.removePrefix("/")
+    }
+
 }
