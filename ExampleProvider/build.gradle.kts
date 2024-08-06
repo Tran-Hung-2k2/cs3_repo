@@ -4,13 +4,13 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.2.1")
 }
 // use an integer for version numbers
-version = -1
+version = 1
 
 
 cloudstream {
     // All of these properties are optional, you can safely remove them
 
-    description = "Phim Vietsuborg"
+    description = "Xem phim tại vietsub.org"
     authors = listOf("Tran Hung")
 
     /**
