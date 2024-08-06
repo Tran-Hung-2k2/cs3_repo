@@ -36,7 +36,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
 
         return MovieSearchResponse(
             img?.attr("alt")?.replaceFirst("Watch ", "") ?: return null,
-            fixUrl(img.attr("src")),
+            img.toString(),
             this@ExampleProvider.name,
             TvType.Movie,
             fixUrl(img.attr("src")),
