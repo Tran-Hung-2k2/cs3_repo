@@ -35,7 +35,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() { // all providers mus
         val img = this.selectFirst("figure img")
 
         return MovieSearchResponse(
-            img?.attr("alt")?.replaceFirst("Watch ", "") ?: return null,
+            img?.attr("alt")?.replaceFirst("Xem ", "") ?: return null,
             href,
             title,
             TvType.Movie,
