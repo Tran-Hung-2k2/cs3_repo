@@ -125,7 +125,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             newTvSeriesLoadResponse(title, url, TvType.TvSeries, episodes) {
                 this.posterUrl = fixUrl(poster)
                 this.year = year
-                this.plot = description
+                this.plot = description + fixUrl(poster)
                 this.tags = tags
                 this.rating = rating
                 addActors(actors)
@@ -135,7 +135,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             newMovieLoadResponse(title, url, TvType.Movie, link) {
                 this.posterUrl = fixUrl(poster)
                 this.year = year
-                this.plot = description
+                this.plot = description + fixUrl(poster)
                 this.tags = tags
                 this.rating = rating
                 addActors(actors)
