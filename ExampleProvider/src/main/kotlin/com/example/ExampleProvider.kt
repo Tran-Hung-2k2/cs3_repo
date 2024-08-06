@@ -97,7 +97,21 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
 
         val title = document.selectFirst("strong")?.text()?.trim().toString()
         val link = document.selectFirst("video")?.attr("src")
-        val poster = document.selectFirst("div.jw-preview.jw-reset")?.attr("style")?.let { Regex("""url\(["']?([^"']*)["']?\)""").find(it)?.groups?.get(1)?.value }
+//        val poster = document.selectFirst("div.jw-preview.jw-reset")?.attr("style")?.let {
+//            Regex("""url\(["']?([^"']*)["']?\)""").find(it)?.groups?.get(1)?.value
+//        }
+
+        val element = document.selectFirst("div.jw-preview.jw-reset")
+
+        val styleAttr = element?.attr("style")
+
+        val regex = Regex("""url\(["']?([^"']*)["']?\)""")
+        val matchResult = styleAttr?.let { regex.find(it) }
+
+        val urlGroup = matchResult?.groups?.get(1)
+
+        val poster = urlGroup?.value
+
         val tags = document.select("p.genres a").map { it.text() }
         val year = document.select(".year").text().trim().toIntOrNull()
         val tvType = if (document.select("#listsv-1 li").size > 1) TvType.TvSeries else TvType.Movie
@@ -125,7 +139,12 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             newTvSeriesLoadResponse(title, url, TvType.TvSeries, episodes) {
                 this.posterUrl = fixUrl(poster)
                 this.year = year
-                this.plot = description + poster
+                this.plot = "Element: ${element?.outerHtml()}\n" +
+                        "Style Attribute: $styleAttr\n" +
+                        "Match Result: ${matchResult?.value}\n" +
+                        "URL Group: ${urlGroup?.value}\n" +
+                        "Poster URL: $poster\n" +
+                        "Description: $description"
                 this.tags = tags
                 this.rating = rating
                 addActors(actors)
@@ -135,7 +154,12 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             newMovieLoadResponse(title, url, TvType.Movie, link) {
                 this.posterUrl = fixUrl(poster)
                 this.year = year
-                this.plot = description + poster
+                this.plot = "Element: ${element?.outerHtml()}\n" +
+                        "Style Attribute: $styleAttr\n" +
+                        "Match Result: ${matchResult?.value}\n" +
+                        "URL Group: ${urlGroup?.value}\n" +
+                        "Poster URL: $poster\n" +
+                        "Description: $description"
                 this.tags = tags
                 this.rating = rating
                 addActors(actors)
