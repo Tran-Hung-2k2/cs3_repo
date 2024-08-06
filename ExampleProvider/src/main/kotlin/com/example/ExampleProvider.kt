@@ -43,7 +43,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
             list = HomePageList(
                 name = request.name,
                 list = home,
-                isHorizontalImages = true
+                isHorizontalImages = false
             ),
             hasNext = true
         )
@@ -52,7 +52,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
     //    SEARCH PAGE
     override suspend fun search(query: String): List<SearchResponse> {
         return app.post(
-            "$mainUrl/search/$query"
+            "$mainUrl/search/$query/page/"
         ).document
             .select("article")
             .mapNotNull {
