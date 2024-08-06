@@ -5,7 +5,6 @@ import com.lagradost.cloudstream3.HomePageList
 import com.lagradost.cloudstream3.HomePageResponse
 import com.lagradost.cloudstream3.LoadResponse
 import com.lagradost.cloudstream3.LoadResponse.Companion.addActors
-import com.lagradost.cloudstream3.LoadResponse.Companion.addTrailer
 import com.lagradost.cloudstream3.TvType
 import com.lagradost.cloudstream3.MainAPI
 import com.lagradost.cloudstream3.MainPageRequest
@@ -96,7 +95,6 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
         val document = request.document
 
         val title = document.selectFirst("strong")?.text()?.trim().toString()
-        val link = document.selectFirst("video")?.attr("src")
         val poster = document.selectFirst("div.jw-preview.jw-reset")?.attr("style")?.let {
             Regex("""url\(["']?([^"']*)["']?\)""").find(it)?.groups?.get(1)?.value
         }
@@ -134,7 +132,7 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
                 this.recommendations = recommendations
             }
         } else {
-            newMovieLoadResponse(title, url, TvType.Movie, link) {
+            newMovieLoadResponse(title, url, TvType.Movie, url) {
                 this.posterUrl = fixUrl(poster)
                 this.year = year
                 this.plot = description
