@@ -31,14 +31,14 @@ class ExampleProvider(val plugin: TestPlugin) : MainAPI() {
         val link = this.select("div.halim-item a").last() ?: return null
         val href = link.attr("href")
         val title = link.attr("title")
-        val img = this.selectFirst("figure img")
+        val poster = fixUrl(this.selectFirst("figure img")?.attr("src"))
 
         return MovieSearchResponse(
             title,
-            href,
+            poster,
             this@ExampleProvider.name,
             TvType.Movie,
-            fixUrl(img?.attr("src"))
+            poster
         )
     }
 
