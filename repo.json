@@ -1,6 +1,6 @@
 {
-    "name": "Việt Nam repo",
-    "description": "Các web phim dành cho người Việt",
+    "name": "Hexated providers repository",
+    "description": "",
     "manifestVersion": 1,
     "pluginLists": [
       "https://raw.githubusercontent.com/hexated/cloudstream-extensions-hexated/refs/heads/builds/plugins.json"
