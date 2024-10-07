@@ -3,6 +3,6 @@
     "description": "Các web phim dành cho người Việt",
     "manifestVersion": 1,
     "pluginLists": [
-      "https://raw.githubusercontent.com/Tran-Hung-2k2/cs3_repo/builds/plugins.json"
+      "https://raw.githubusercontent.com/hexated/cloudstream-extensions-hexated/refs/heads/builds/plugins.json"
     ]
 }
